@@ -1,0 +1,10 @@
+version: '3'
+services:
+  site:
+    build:
+      context: ../../
+      dockerfile: build/dev/Dockerfile
+    volumes:
+      - ../../src:/app/src
+    ports:
+      - 4400:4200
