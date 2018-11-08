@@ -45,3 +45,12 @@ $stripe: stripeShadow(1000);
     box-shadow: $stripe;
   }
 }
+
+.mat-button .mat-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  * {
+    margin: 0 5px;
+  }
+}
