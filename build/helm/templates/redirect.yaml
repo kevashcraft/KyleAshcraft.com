@@ -1,0 +1,46 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kyleashcraft-com-www-redirect
+  labels:
+    project: kyleashcraft-com
+spec:
+  selector:
+    matchLabels:
+      project: kyleashcraft-com
+      app: kyleashcraft-com-www-redirect
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        project: kyleashcraft-com
+        app: kyleashcraft-com-www-redirect
+    spec:
+      containers:
+      - name: kyleashcraft-com-www-redirect
+        image: schmunk42/nginx-redirect:0.3.2
+        env:
+        - name: SERVER_REDIRECT
+          value: www.kyleashcraft.com
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kyleashcraft-com-www-redirect
+  labels:
+    project: kyleashcraft-com
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: kyleashcraft-com-www-redirect

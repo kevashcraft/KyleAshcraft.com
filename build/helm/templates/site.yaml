@@ -1,0 +1,44 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: kyleashcraft-com-www
+  labels:
+    project: kyleashcraft-com
+spec:
+  selector:
+    matchLabels:
+      project: kyleashcraft-com
+      app: kyleashcraft-com-www
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        project: kyleashcraft-com
+        app: kyleashcraft-com-www
+    spec:
+      containers:
+      - name: kyleashcraft-com-www
+        image: kevashcraft/kyleashcraft.com:{{ .Values.tag }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          timeoutSeconds: 1
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: kyleashcraft-com-www
+  labels:
+    project: kyleashcraft-com
+spec:
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+  selector:
+    app: kyleashcraft-com-www
